@@ -1,4 +1,3 @@
-
 class HangmanField(object):
     states = [
         """
@@ -55,8 +54,6 @@ class HangmanField(object):
         |
         |
         """
-
-    ]
-
+]
     def draw(self, wrong_tries: int)->None:
         print(self.states[wrong_tries])
