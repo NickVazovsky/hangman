@@ -1,24 +1,56 @@
-from collections import defaultdict
+import string
+import uuid
+import random
 
 
-class Game(object):
+class ComputerPlayer(object):
+    changes_turns = False
+
     def __init__(self):
-        self.rounds = []
-        self.won_rounds = defaultdict(int)
+        self.id = uuid.uuid4()
 
-    def add_round(self, played_round, player, opponent):
-        self.rounds.append(played_round)
+    def quess_new_word(self):
+        words = [
+            'nickname',
+            
+            
+        ]
 
-        if played_round.is_lost():
-            winner = opponent
-        else:
-            winner = player
+        return random.choice(words)
 
-        self.won_rounds[winner.id] += 1
+    def should_change_turns(self):
+        return self.changes_turns
 
-    def get_winner(self):
-        for player_id, wins in self.won_rounds.items():
-            if wins >= 2:
-                return player_id
 
-        return None
+class HumanPlayer(ComputerPlayer):
+    changes_turns = True
+
+    def _validate_word(self, word):
+        if word is None:
+            return False
+
+        for letter in word:
+            if letter.lower() not in string.ascii_lowercase:
+                return False
+        return True
+
+    def select_other_player(self):
+        player_type = {
+            'human': HumanPlayer,
+            'ai': ComputerPlayer,
+        }
+
+        while True:
+            try:
+                selected = input('ai or human: ')
+                return player_type[selected]
+            except KeyError:
+                print('repeat write input:ai or human')
+
+    def quess_new_word(self):
+        word = None
+
+        while not self._validate_word(word):
+            word = input('Input your English word: ')
+
+        return word
