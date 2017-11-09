@@ -51,6 +51,6 @@ class HumanPlayer(ComputerPlayer):
         word = None
 
         while not self._validate_word(word):
-            word = input('Input your English word: ')
+            word = input('Input your English words: ')
 
         return word
