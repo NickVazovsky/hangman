@@ -1,4 +1,5 @@
 from hangman.field import HangmanField
+from collections import Counter
 
 
 class Round(object):
@@ -32,13 +33,12 @@ class Round(object):
             return
 
         if letter in self.word:
-            for index, l in enumerate(self.word):
-                if l == letter:
+            for index, let in enumerate(self.word):
+                if let == letter:
                     self.word_status[index] = True
         else:
             self.wrong_tries += 1
-
-        self.tries += 1
+            self.tries += 1
         self.tried_letters.add(letter)
 
     def mask_word(self):
@@ -56,10 +56,34 @@ class Round(object):
 
     def draw_result(self):
         print()
-        print('-' * 10)
-        print()
+        c = Counter(self.mask_word())
+        print('не отгадано:', c['_'])
+        print('отгадано:', len(self.word) - c['_'])
 
         if self.is_word_solved():
             print('Word is solved, a point goes to you!')
+            print("""
+             _______________________
+            |                       |
+            |       СПАСИБО         |
+            |      ЗА ИГРУ !!!      |
+            |_______________________|
+            
+            | 0 |
+            * * *
+              * 
+             * *
+            |   |
+               
+            """)
         else:
             print('Word is not solved, point goes to your opponent.')
+            print("""
+        _______
+        |     |
+        |   | 0 |
+        |     |
+        |    | |
+        |
+        |
+        """)
